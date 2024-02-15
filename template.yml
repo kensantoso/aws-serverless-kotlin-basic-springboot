@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Example Message API written with SpringBoot with the aws-serverless-java-container library
+Description: Example Message API written with Kotlin SpringBoot with the aws-serverless-java-container library
 
 Globals:
   Api:
@@ -8,15 +8,18 @@ Globals:
     EndpointConfiguration: REGIONAL
 
 Resources:
-  PetStoreFunction:
+  MessageFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: demo.StreamLambdaHandler::handleRequest
       Runtime: java21
       CodeUri: .
-      MemorySize: 1512
+      MemorySize: 1769
       Policies: AWSLambdaBasicExecutionRole
       Timeout: 60
+      AutoPublishAlias: SnapStart
+      SnapStart:
+        ApplyOn: PublishedVersions
       Events:
         HttpApiEvent:
           Type: HttpApi
@@ -25,7 +28,7 @@ Resources:
             PayloadFormatVersion: '1.0'
 
 Outputs:
-  SpringBootPetStoreApi:
+  MessageApi:
     Description: URL for application
     Value: !Sub 'https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/'
     Export:
